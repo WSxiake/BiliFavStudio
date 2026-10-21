@@ -1,5 +1,10 @@
 # 🐳 BiliFav Studio
 
+> [!IMPORTANT]
+> **本软件的所有内容，包括本仓库的上传与发布，均由 AI 完成。作者仅负责许愿、监工和测试。**
+>
+> 遇到 Bug，可以到[侠客的 B 站空间](https://space.bilibili.com/391987/)私信反馈，或在本仓库提交 [**Issues**](https://github.com/WSxiake/BiliFavStudio/issues)。看到了会想办法鞭策 AI 改好，继续迭代。
+
 大肥鱼的收藏夹整理小站：在电脑上浏览、整理和搬运 B 站收藏夹。
 
 ## 功能
@@ -59,4 +64,4 @@ powershell -ExecutionPolicy Bypass -File tools/build_windows.ps1
 
 当前版本为 **v1.0.0（首次公开发布）**。发布页提供 Windows 安装包及免安装 ZIP；仓库保留程序源码、教程、检查和构建工具。
 
-[版本说明](CHANGELOG.md) · [项目与素材说明](NOTICE.md)
+[版本说明](CHANGELOG.md)
