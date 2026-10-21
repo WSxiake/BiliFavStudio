@@ -1,0 +1,241 @@
+/*
+ * 框体外观：原主题配色、纯色框体、错位底板。
+ * 只处理容器；按钮、卡片拖放及页面状态仍由原样式负责。
+ */
+:root {
+  --frame-edge: var(--line);
+  --frame-head: var(--bar-bg);
+  --frame-back: var(--blue-3);
+  --frame-label: var(--bar-fg);
+  --frame-label-dim: var(--active-fg);
+}
+html[data-skin="dark"] {
+  --frame-edge: var(--line);
+  --frame-back: var(--blue-4);
+}
+
+/* 内容和标题统一使用纯色底。 */
+.scroll, .stage {
+  background-color: var(--paper);
+  background-image: none;
+}
+.scroll { padding: 18px 22px 26px 18px; }
+
+/* 主面板：前面的白纸、深色描边、右下方的实色底板。 */
+.panel {
+  position: relative;
+  isolation: isolate;
+  border-color: var(--frame-edge);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 var(--frame-back);
+  margin-bottom: 20px;
+}
+.panel-h {
+  position: relative;
+  isolation: isolate;
+  min-height: 43px;
+  padding: 10px 16px;
+  margin: -14px -16px 15px;
+  border-bottom: 2px solid var(--frame-edge);
+  background: var(--frame-head);
+  color: var(--frame-label);
+  letter-spacing: 1px;
+}
+.panel-h .sub { color: var(--frame-label-dim); }
+.panel-h .step {
+  background: transparent;
+  color: var(--frame-label);
+  border: 1px solid #ffffff70;
+  border-radius: 0;
+}
+.panel.collapsible > .panel-h::before { color: var(--frame-label); }
+.panel.collapsible > .panel-h:hover { color: var(--frame-label); }
+.panel.collapsible:not(.open) { padding-bottom: 0; }
+.panel.collapsible:not(.open) > .panel-h { margin-bottom: 0; border-bottom: 0; }
+.panel.collapsible:not(.open)::after { display: none; }
+
+/* Hints and management actions belong to the expanded body; keep the colored header. */
+.panel-expanded-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.panel-expanded-tools > .hint { margin: 0; }
+.panel-expanded-tools > button { flex: none; }
+
+/* 标题保持纯色，框体和教程不再生成波点装饰。 */
+:is(.topbar, .titlebar, .panel-h, .dw-head, .bp-head, .dt-head, .tp-head, .ap-head, .tut-head, .wc-head, .modal h3)::after {
+  content: none;
+}
+
+/* 数字小框只用薄一层底板，避免和主面板争层次。 */
+.stat-grid { gap: 15px; margin-bottom: 20px; }
+.stat-box {
+  position: relative;
+  isolation: isolate;
+  border-color: var(--frame-edge);
+  border-radius: 1px;
+  border-top: 4px solid var(--blue);
+  box-shadow: none;
+}
+.stat-box::after { height: 12px; opacity: .4; }
+
+/* 页标题保留原有斜切和工具按钮，仅为标题底板补一层错位边。 */
+.titlebar {
+  isolation: isolate;
+  background: var(--bar-bg);
+  border-bottom-color: var(--frame-edge);
+  box-shadow: none;
+}
+.topbar { isolation: isolate; }
+.topbar .tb-left::after { content: none; }
+.titlebar .plate::after { content: none; }
+.titlebar .tb-tools { color: var(--active-fg); }
+.titlebar .tb-tools > .plain { color: inherit; }
+
+/* 菜单、浏览、搬运统一为左侧斜切标题块和右侧留白。 */
+.page:is([data-page="menu"], [data-page="sort"], [data-page="copy"]) > .titlebar { background: var(--white); }
+.page:is([data-page="menu"], [data-page="sort"], [data-page="copy"]) > .titlebar::after { content: none; }
+.page:is([data-page="menu"], [data-page="copy"]) > .titlebar .tb-tools { color: var(--navy); }
+/* 浏览页仍由原来的涟漪展开整理背景。 */
+body:not(.sort-editing) .page[data-page="sort"] > .titlebar .tb-tools { color: var(--navy); }
+
+/* 侧栏是外壳，资料和列表是放进去的内纸；不改宽度和挤压逻辑。 */
+.drawer {
+  container-type: inline-size;
+  border-right-width: 1px;
+  border-right-color: var(--frame-edge);
+  box-shadow: none;
+}
+.boxpanel {
+  border-left-width: 1px;
+  border-left-color: var(--frame-edge);
+  box-shadow: none;
+}
+.detail { border-right: 1px solid var(--frame-edge); box-shadow: none; }
+.drawer-resizer::after { width: 1px; margin-left: -.5px; }
+.dw-head::after, .bp-head::after { content: none; }
+/* 窄栏仍与右侧标题条等高；标题让出空间，保留所有操作按钮。 */
+@container (max-width: 260px) {
+  .dw-head {
+    gap: 4px;
+    height: 50px;
+    padding: 0 8px;
+  }
+  .dw-head > span:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dw-head .sub { display: none; }
+  .dw-head > :is(.dw-close, .section-help) {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+}
+.dw-head .sub, .dw-head .sub b, .bp-head .sub { color: var(--bar-fg-dim); }
+:is(.dw-head, .bp-head, .dt-head, .tp-head, .ap-head, .tut-head, .wc-head) {
+  position: relative;
+  isolation: isolate;
+  background: var(--frame-head);
+  color: var(--frame-label);
+  border-bottom: 2px solid var(--frame-edge);
+}
+:is(.dw-head, .bp-head) .sub, .dw-head .sub b,
+.tut-head .step { color: var(--frame-label-dim); }
+.taskpop .tp-head { background: var(--frame-head); }
+.dw-search { background: var(--white); border-bottom: 1px solid var(--line); }
+.dw-list { padding-bottom: 18px; }
+.fav-item:not(.new) {
+  border-radius: 1px;
+  box-shadow: none;
+}
+.bp-nav { border-bottom: 1px solid var(--line); }
+.bp-grid { padding-bottom: 16px; }
+.bp-stats { box-shadow: none; }
+@container (max-width: 260px) {
+  .bp-head { gap: 4px; padding: 0 8px; }
+  .bp-head > b { flex: 1 1 auto; }
+  .bp-head .sub { display: none; }
+  .bp-head > :is(.bp-close, .section-help) { flex: 0 0 22px; width: 22px; height: 22px; margin: 0; }
+  .bp-nav { gap: 4px; padding-right: 8px; padding-left: 8px; }
+  .bp-size { gap: 5px; padding-right: 8px; padding-left: 8px; }
+  .bp-grid { padding-right: 8px; padding-left: 8px; }
+  .bp-stats .bs-grid { grid-template-columns: 1fr; }
+}
+.bs-grid { gap: 8px; }
+.bs-cell, .dt-meta {
+  border-color: var(--line);
+  border-radius: 1px;
+  box-shadow: none;
+}
+.dt-sec {
+  border: 1px solid var(--line);
+  padding: 12px;
+  background: var(--white);
+  box-shadow: none;
+}
+.dt-sec > b {
+  display: block;
+  margin: -12px -12px 10px;
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--line);
+  background: var(--blue-4);
+}
+
+/* 浮窗沿用同一套框。教程立绘继续直接融在正文中，不给她加框或名字。 */
+.modal, .taskpop, .appear-pop, .tut-card, .wc-box {
+  isolation: isolate;
+  border-color: var(--frame-edge);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 var(--frame-back),
+              0 18px 36px #08152340;
+}
+.modal h3 {
+  position: relative;
+  isolation: isolate;
+  margin: -20px -22px 16px;
+  padding: 13px 50px 13px 20px;
+  background-color: var(--frame-head);
+  border-bottom: 2px solid var(--frame-edge);
+  color: var(--frame-label);
+}
+.modal .desc { color: var(--txt-d); }
+/* 标题新增了装饰层，关闭按钮仍需在标题前面接收点击。 */
+.modal-x { z-index: 2; }
+.modal-actions {
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.tut-bar { height: 3px; }
+.tut-head {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) max-content minmax(64px, 1fr) 21px;
+  background: var(--bar-bg);
+}
+.tut-head > b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tut-head .step { margin-left: 0; color: var(--bar-fg-dim); }
+.tut-head .tut-x { grid-column: 4; color: var(--bar-fg); }
+.tut-body p { color: var(--txt-d); }
+.tut-foot {
+  border-top: 0;
+  background: transparent;
+}
+.taskpop .logbox {
+  border: 1px solid var(--line);
+  box-shadow: inset 3px 0 0 var(--blue-3);
+}
+.ap-body { background: transparent; }
+.qr-box { border-color: var(--frame-edge); border-radius: 1px; box-shadow: 4px 4px 0 var(--blue-3); }
+
+/* 小窗口里收一点外壳留白，不压缩按钮或改卡片的网格算法。 */
+@media (max-width: 1000px) {
+  .scroll { padding: 14px 18px 23px 14px; }
+  .panel-h .sub { letter-spacing: 0; }
+  .stat-grid { gap: 11px; }
+}

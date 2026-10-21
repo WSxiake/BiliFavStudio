@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 运行时数据（登录信息、任务进度、日志）
+/data/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# 打包产物
+build/
+dist/
+*.spec
+
+# 本地检查及构建输出
+.perf/
+dist_new/
+release/
+backup/
+logs/
+affinity_selftest/
+github-ready/
+node_modules/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+**/session.json
+*.log
+*.pem
+*.key
+!BiliFav Studio.spec
+docs/preview/
+docs/mockups/
+docs/icon-proposals/
+docs/screenshots/

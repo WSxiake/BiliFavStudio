@@ -1,0 +1,11 @@
+{
+  "name": "bilifav-studio-checks",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "node tests/ui/efficiency.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiliFav Studio · 大肥鱼的收藏夹整理小站</title>
+<link rel="stylesheet" href="/static/style.css?v=1.0.0">
+<link rel="stylesheet" href="/static/frames.css?v=1.0.0">
+  <!-- 两种格式都给：有的场合（比如浏览器应用模式的任务栏）认 .ico -->
+  <link rel="icon" type="image/png" href="/static/favicon.png">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <link rel="apple-touch-icon" href="/static/favicon.png">
+</head>
+<body>
+
+<!-- ===================== 图标定义（全部单色线性，颜色交给 CSS） ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="badge-white-outline" x="-12%" y="-12%" width="124%" height="124%" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+    <feMorphology in="SourceAlpha" operator="dilate" radius=".02" result="edge"/>
+    <feFlood flood-color="#fff" result="white"/>
+    <feComposite in="white" in2="edge" operator="in" result="outline"/>
+    <feMerge><feMergeNode in="outline"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <g id="i-home"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9.5 20v-5.5h5V20"/></g>
+  <g id="i-inbox"><path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M4.5 5h15l1.5 8v6H3v-6z"/></g>
+  <g id="i-sort"><path d="M4 6h9M4 12h6M4 18h3"/><path d="M16 5v13"/><path d="M13 15l3 3 3-3"/></g>
+  <g id="i-task"><path d="M3 12h4l2.5-6 4 12 2.5-6h5"/></g>
+  <g id="i-log"><path d="M5 4h11l3 3v13H5z"/><path d="M8.5 9h7M8.5 13h7M8.5 17h4"/></g>
+  <g id="i-menu"><path d="M4 7h16M4 12h16M4 17h16"/></g>
+  <g id="i-sun"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></g>
+  <g id="i-moon"><path d="M20.5 13.3A8.6 8.6 0 1 1 10.7 3.5a6.7 6.7 0 0 0 9.8 9.8z"/></g>
+  <g id="i-upload"><path d="M12 16V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 16v3h16v-3"/></g>
+  <g id="i-history"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.2 4.5v4.2h4.2"/><path d="M12 7.8V12l3 1.8"/></g>
+  <g id="i-box"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></g>
+  <g id="i-check"><path d="M5 12.5 10 17.5 19 7"/></g>
+  <g id="i-x"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></g>
+  <g id="i-plus"><path d="M12 5.5v13M5.5 12h13"/></g>
+  <g id="i-play"><path d="M8 5.5 18 12 8 18.5z"/></g>
+  <g id="i-pause"><path d="M9 5.5v13M15 5.5v13"/></g>
+  <g id="i-stop"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/></g>
+  <g id="i-music"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></g>
+  <g id="i-game"><rect x="3" y="8" width="18" height="10" rx="3"/><path d="M7.5 11v4M5.5 13h4M15.5 12h.01M17.5 15h.01"/></g>
+  <g id="i-book"><path d="M4 5h7a3 3 0 0 1 3 3v11a2.5 2.5 0 0 0-2.5-2.5H4z"/><path d="M20 5h-4a3 3 0 0 0-3 3v11a2.5 2.5 0 0 1 2.5-2.5H20z"/></g>
+  <g id="i-mountain"><path d="M3 19l7-12 4 7 2-3 5 8z"/></g>
+  <g id="i-chev-l"><path d="M14.5 5 7.5 12l7 7"/></g>
+  <g id="i-chev-r"><path d="M9.5 5l7 7-7 7"/></g>
+  <g id="i-alert"><path d="M12 3.5 21 19H3z"/><path d="M12 9.5v4.5M12 16.8v.2"/></g>
+  <g id="i-refresh"><path d="M20 11a8 8 0 1 0-1.5 5"/><path d="M20 5v6h-6"/></g>
+  <g id="i-link"><path d="M9.5 14.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M14.5 9.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/></g>
+  <g id="i-download"><path d="M12 3.5v11"/><path d="M8 11l4 4 4-4"/><path d="M4.5 19.5h15"/></g>
+  <g id="i-shield"><path d="M12 3.5 19 6v6c0 4-3 7-7 8.5C8 19 5 16 5 12V6z"/><path d="M9.5 12l2 2 3.5-4"/></g>
+  <g id="i-save"><path d="M5 4h11l3 3v13H5z"/><path d="M8.5 4v6h7V4"/><path d="M8.5 20v-6h7v6"/></g>
+  <g id="i-undo"><path d="M4 9h11a5 5 0 0 1 0 10h-6"/><path d="M8 5 4 9l4 4"/></g>
+  <g id="i-redo"><path d="M20 9H9a5 5 0 0 0 0 10h6"/><path d="M16 5l4 4-4 4"/></g>
+  <g id="i-user"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></g>
+  <g id="i-folder"><path d="M3.5 6.5h6l2 2.5h9v9h-17z"/></g>
+  <g id="i-trash"><path d="M5 7h14"/><path d="M8 7V4.5h8V7"/><path d="M6.5 7l1 13h9l1-13"/></g>
+  <g id="i-tag"><path d="M11.5 3.5H20v8.5l-8.5 8.5L3 12z"/><circle cx="16" cy="8" r="1.5"/></g>
+  <g id="i-palette"><path d="M12 3.5a8.5 8.5 0 0 0 0 17c1.2 0 2-.9 2-2 0-1.4-1.1-2-1.1-3 0-.8.7-1.5 1.5-1.5h1.6A4.5 4.5 0 0 0 20.5 9.5C20.5 6 16.7 3.5 12 3.5z"/><circle cx="8" cy="10" r="1.1"/><circle cx="12" cy="7.6" r="1.1"/><circle cx="15.8" cy="9.6" r="1.1"/></g>
+  <g id="i-edit"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14.4 5.6 18.4 9.6"/></g>
+  <g id="i-list"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></g>
+  <g id="i-info"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.6M12 7.7v.5"/></g>
+  <g id="i-help"><circle cx="12" cy="12" r="8.5"/><path d="M9.5 9.4a2.6 2.6 0 1 1 3.3 2.5c-.6.2-.9.7-.9 1.4v.3"/><path d="M12 16.6h.01"/></g>
+  <g id="i-box"><path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/><path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/></g>
+  <g id="i-search"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></g>
+  <g id="i-ban"><circle cx="12" cy="12" r="8.5"/><path d="M6.2 6.2 17.8 17.8"/></g>
+  <g id="i-lock"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/></g>
+  <g id="i-unlock"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8 10.5V7.6a4 4 0 0 1 7.5-2"/></g>
+  <g id="i-check-square"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M8 12.2l2.8 2.8L16.4 9"/></g>
+  <g id="i-pin"><path d="M9.2 3.5h5.6l-.9 5.2 3.1 3.1H7l3.1-3.1z"/><path d="M12 11.8v8.7"/></g>
+</defs></svg>
+
+<div class="app">
+
+  <!-- ===== 顶部状态栏 ===== -->
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="tb-icon" id="fav-drawer-open" title="收藏夹列表：按名字搜，也能按里面的视频搜">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-folder"/></svg>
+        <span id="top-folder-label">收藏夹</span>
+      </button>
+      <span class="app-name">BiliFav Studio</span>
+      <span class="app-sub">大肥鱼的收藏夹整理小站</span>
+    </div>
+
+    <div class="tb-right">
+      <button class="topbtn" id="top-skin" title="切到夜晚（把白底换成暗色）">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-moon" id="skin-icon"/></svg>
+        <b id="skin-text">夜晚</b>
+      </button>
+      <div class="topbtn" id="top-task">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-box"/></svg>
+        <b>任务</b>
+        <span class="dotred idle" id="nav-task-badge">待命</span>
+      </div>
+    <div class="topbtn" id="top-browser" title="用系统默认浏览器打开当前界面（功能一样，外面是浏览器窗口）">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-link"/></svg>
+      <b>浏览器</b>
+    </div>
+    </div>
+  </div>
+
+  <!-- ===== 左侧收藏夹栏：从左上角那个按钮滑出来，滑出后就固定在左边 ===== -->
+  <aside class="drawer" id="fav-drawer">
+    <div class="dw-head">
+      <span title="我的收藏夹">我的收藏夹</span>
+      <span class="sub" id="fav-count"><b id="top-folders">0</b> 个 · <b id="top-items">0</b> 条</span>
+      <button class="dw-close" id="fav-clean-all" title="把所有收藏夹里的失效内容都清一遍">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-trash"/></svg>
+      </button>
+      <button class="dw-close" id="fav-refresh" title="重新读一遍收藏夹列表；当前开着的那个也会一起重读">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-refresh"/></svg>
+      </button>
+      <button class="dw-close" id="fav-close" title="收起来">&times;</button>
+    </div>
+    <div class="dw-search">
+      <!-- 外面这层是"斜切的皮"：背景和边框挂在它身上，input 反向转回来让字保持正 -->
+      <div class="dws-box">
+        <input class="inp" type="text" id="fav-search" maxlength="200" placeholder="搜收藏夹名，或者它里面的视频…" spellcheck="false">
+      </div>
+      <button class="tbtn hidden" id="fav-scan-online">在线补查</button>
+      <button class="tbtn hidden" id="fav-scan-stop">停止</button>
+    </div>
+    <div class="dw-hint" id="fav-hint">先搜索收藏夹名称和本地缓存；需要最新结果时可在线补查。</div>
+    <div class="dw-list" id="fav-list"></div>
+    <div class="drawer-resizer" id="fav-resizer" title="按住拖动，可以调收藏夹栏的宽度"></div>
+  </aside>
+
+  <!-- ===== 任务浮层（任务中心的全部内容都在这里，点右上角「任务」弹出） ===== -->
+  <div class="taskpop" id="taskpop">
+    <div class="tp-head">
+      <span>任务</span>
+      <span class="tag" id="task-state-tag">待命</span>
+      <button class="tp-close" id="taskpop-close">&times;</button>
+    </div>
+    <div class="tp-body">
+      <div class="task-head">
+        <b id="task-title">没有任务在跑</b>
+        <span style="flex:1"></span>
+        <span class="plain" id="task-elapsed"></span>
+      </div>
+      <div class="bar" id="task-bar"><i style="width:0%"></i></div>
+      <div class="stats" id="task-stats"></div>
+      <div class="task-actions">
+        <button class="tp-btn" id="task-pause" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linejoin="round"><use href="#i-pause"/></svg>
+          暂停
+        </button>
+        <button class="tp-btn danger" id="task-stop" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linejoin="round"><use href="#i-stop"/></svg>
+          停止
+        </button>
+        <span class="grow"></span>
+        <label class="chk"><input type="checkbox" id="task-autoscroll" checked>自动滚到底</label>
+      </div>
+      <div class="logbox tp-logbox" id="task-log"></div>
+    </div>
+  </div>
+
+  <!-- ==================== 整理 ==================== -->
+  <section class="page" data-page="sort">
+    <div class="titlebar">
+      <!-- 进整理模式时，这一行的底色从按钮那儿涟漪式铺开；退出时反向收回去 -->
+      <div class="ripple" id="sort-ripple"></div>
+      <div class="plate">
+        <div class="hd-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-sort"/></svg>
+        </div>
+        <h1 id="sort-folder-title">还没选收藏夹</h1>
+      </div>
+      <div class="tb-tools">
+        <button class="mode-btn" id="sort-mode" title="预览是只读的；想动顺序得先点这里">
+          <span class="mode-icon mode-start-icon" aria-hidden="true"><img src="/static/icons/organize-start-v3.png" data-tint-family="organize" alt=""></span>
+          <span class="mode-icon mode-save-icon" aria-hidden="true"><img src="/static/icons/organize-finish-v3.png" data-tint-family="organize" alt=""></span>
+          <b id="sort-mode-text">开始整理</b>
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs" id="sort-tabs">
+      <div class="tab on" data-tab="all"><span>全部</span></div>
+      <div class="tag-tabs" id="sort-tag-tabs"></div>
+      <span class="grow"></span>
+    </div>
+
+    <!-- 第一行：一键排序（顺序维度） -->
+    <div class="sortbar sortbar-sort">
+      <span>一键排序</span>
+      <div class="chips" id="sort-chips"></div>
+    </div>
+
+    <!-- 第二行：检索 / 多选 / 标签 / 分页 / 页目录（找和看，不动顺序） -->
+    <div class="sortbar sortbar-tools">
+      <div class="sort-filter-control" role="group" aria-label="视频关键词与筛选范围">
+        <input class="tb-search" type="text" id="sort-filter" placeholder="筛选标题 / UP 主…" aria-label="按标题或 UP 主筛选视频">
+        <button class="tbtn scope-btn" id="sort-scope" aria-pressed="false" title="筛选范围：现在是「本页」—— 只筛这一页。点一下换成「本收藏夹」，跨页一起筛">
+          <span id="sort-scope-text">本页</span>
+        </button>
+      </div>
+      <div class="dateflt" id="sort-dateflt" title="按收藏日期筛——留空的那头就是不限">
+        <input type="date" id="sort-date-from" aria-label="收藏日期起">
+        <i>~</i>
+        <input type="date" id="sort-date-to" aria-label="收藏日期止">
+        <button class="df-clear hidden" id="sort-date-clear" title="把日期筛选清掉">&times;</button>
+      </div>
+      <button class="btn-skew" id="sort-multi" title="多选：点卡片就选中，选完在卡片上点右键批量处理">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-check-square"/></svg>
+        <span id="sort-multi-text">多选</span>
+      </button>
+      <button class="btn-skew hidden" id="sort-select-all" title="把这一页显示出来的视频全选上">全选本页</button>
+      <button class="btn-skew ghost hidden" id="sort-pick-clear" title="一个都不选了">取消选择</button>
+      <span class="picked-tip hidden" id="sort-picked"><b id="sort-picked-n">0</b> 个已选 · 在卡片上点右键批量处理</span>
+      <span class="grow"></span>
+      <button class="btn-skew" id="sort-import" title="从 CSV / 文本文件里导入视频：会自动认出里面的 BV 号、av 号和视频链接，加进当前收藏夹">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-upload"/></svg>
+          <span>导入</span>
+              </button>
+      <input type="file" id="sort-import-file" accept=".csv,.txt,.md,text/csv,text/plain" hidden>
+      <button class="btn-skew" id="sort-export" title="把现在这份清单导出成 CSV（含还没提交的改动，文件落在 data/exports/）">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-download"/></svg>
+          <span>导出</span>
+              </button>
+        <button class="btn-skew" id="sort-add" title="把视频加进这个收藏夹">
+        <span>添加视频</span>
+      </button>
+      <button class="btn-skew" id="sort-tag-manage" title="新建 / 管理标签，也可以在卡片上点右键直接加">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-tag"/></svg>
+          <span>标签</span>
+              </button>
+        <button class="btn-skew" id="sort-boxes" title="打开页目录，快速跳到某一页">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-grid"/></svg>
+          <span id="sort-boxes-text">页目录</span>
+        </button>
+    </div>
+
+    <div class="stage">
+      <div class="picker" id="sort-picker">
+        <div class="panel">
+          <div class="panel-h">还没选收藏夹<span class="sub">左上角那个「收藏夹」按钮</span></div>
+          <div id="sort-folder-list">
+            <div class="empty">
+              <span class="em">📁</span>
+              <p>从抽屉里挑一个来整理</p>
+              <button class="tbtn primary" data-open-drawer="1" style="margin-top:10px">打开收藏夹列表</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="sort-workspace" class="hidden">
+        <div class="grid" id="sort-list"></div>
+      </div>
+    </div>
+
+    <div class="statusline sort-statusline">
+      <div class="sort-status-info">
+      <div class="pager hidden" id="sort-pager">
+        <button class="pgbtn" id="pager-prev" title="上一页（←）">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-l"/></svg>
+        </button>
+        <span class="pgpos">第 <b id="pager-now">1</b> / <span id="pager-total">1</span> 页</span>
+        <button class="pgbtn" id="pager-next" title="下一页（→）">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-chev-r"/></svg>
+        </button>
+      </div>
+      <span class="plain">共 <b id="sort-stat-total">0</b> 条<span class="edit-stats"> · 待删除 <b id="sort-stat-del">0</b> · 新增 <b id="sort-stat-add">0</b> · 移动 <b id="sort-stat-moved">0</b></span></span>
+      <div class="duration-summary" id="sort-duration-summary" aria-live="polite"></div>
+      </div>
+      <div class="sort-status-actions">
+      <span class="draft-state" id="sort-save-state" role="status"></span>
+      <span class="ops" id="sort-ops-hint">还没动过，顺序跟线上一样。</span>
+      <span style="flex:1"></span>
+      <button class="sbtn hidden" id="sort-clear-marks">清除所有标记</button>
+      <button class="sbtn hidden" id="sort-rollback" title="把上一次提交的顺序倒回去（只倒顺序；那次提交如果删过视频，删掉的回不来）">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-history"/></svg>
+        回滚提交
+      </button>
+      <button class="sbtn" id="sort-undo" title="往回退一步（Ctrl+Z）">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-undo"/></svg>
+        撤销一步
+      </button>
+      <button class="sbtn" id="sort-redo" title="往前进一步（Ctrl+Y）">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-redo"/></svg>
+        重做一步
+      </button>
+      <button class="sbtn" id="sort-reset" title="放弃本地改动，回到本次加载时的清单；不会重新读取线上内容">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-refresh"/></svg>
+        全部还原
+      </button>
+      <button class="btn-main" id="sort-apply" disabled><span id="sort-apply-label">提交改动</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 搬运 ==================== -->
+  <section class="page" data-page="copy">
+    <div class="titlebar">
+      <div class="plate">
+        <div class="hd-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-inbox"/></svg></div>
+        <h1>搬运收藏夹</h1>
+      </div>
+      <div class="tb-tools"><span class="plain">源和目标选好，就能出发了</span></div>
+    </div>
+
+    <div class="scroll">
+      <div class="panel">
+        <div class="panel-h" data-help="source"><i class="step">1</i>源收藏夹<span class="sub">别人的收藏夹，得是公开的</span></div>
+        <div class="inp-row">
+          <input class="inp" type="text" id="copy-src-input" placeholder="粘贴收藏夹链接，或直接填 media_id 数字">
+          <button class="tbtn" id="copy-src-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-link"/></svg>
+            读取
+          </button>
+        </div>
+        <div class="hint">
+          形如 <code class="mono">https://space.bilibili.com/123/favlist?fid=456789</code>
+          或者 <code class="mono">https://www.bilibili.com/medialist/detail/ml456789</code>，本鱼自己会认出 ID。
+        </div>
+        <div id="copy-src-result" style="margin-top:12px"></div>
+
+        <div class="or-line"><span>或者，从 UP 主找起</span></div>
+
+        <div class="inp-row">
+          <input class="inp" type="text" id="up-input" placeholder="UP 主的 UID（那串数字），或者昵称">
+          <button class="tbtn" id="up-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg>
+            找 UP 主
+          </button>
+        </div>
+        <div id="up-result"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h" data-help="target"><i class="step">2</i>目标收藏夹<span class="sub">只能选你自己账号下的</span></div>
+        <div class="inp-row">
+          <input class="inp" type="text" id="copy-tgt-search" placeholder="搜你自己的收藏夹…">
+          <button class="tbtn" id="copy-tgt-refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-refresh"/></svg>
+            刷新
+          </button>
+          <button class="tbtn" id="copy-tgt-new">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plus"/></svg>
+            新建
+          </button>
+        </div>
+        <div class="folder-grid" id="copy-tgt-list">
+          <div class="empty"><span class="em">🔑</span><p>登录之后才能看到你的收藏夹哦</p></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h" data-help="options"><i class="step">3</i>搬运选项<span class="sub">不懂就别动，默认挺稳的</span></div>
+        <div class="opt-grid">
+          <label class="opt"><span>搬运范围</span>
+            <select id="copy-opt-type">
+              <option value="2" selected>只搬视频稿件</option>
+              <option value="0">全部都搬（视频 + 音频 + 合集）</option>
+              <option value="12">只搬音频</option>
+              <option value="21">只搬视频合集</option>
+            </select>
+          </label>
+          <label class="opt"><span>抓取顺序</span>
+            <select id="copy-opt-order">
+              <option value="mtime" selected>按收藏时间</option>
+              <option value="pubtime">按投稿时间</option>
+              <option value="view">按播放量</option>
+            </select>
+          </label>
+          <label class="opt"><span>每条间隔（秒）</span>
+            <input type="number" id="copy-opt-delay" value="1.5" min="0.3" max="15" step="0.1">
+          </label>
+        </div>
+        <label class="switch" id="copy-opt-prescan-label">
+          <input type="checkbox" id="copy-opt-prescan" checked>
+          <span class="track"></span>
+          <span class="txt">先扫一遍目标收藏夹<small>把已经存在的条目标出来，避免重复添加白跑一趟</small></span>
+        </label>
+        <label class="switch" id="copy-opt-skipinvalid-label">
+          <input type="checkbox" id="copy-opt-skipinvalid" checked>
+          <span class="track"></span>
+          <span class="txt">自动跳过已失效的稿件<small>省下没必要的请求，也少一点被风控盯上的机会</small></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="statusline">
+      <span class="plain" id="copy-summary">选好源和目标，就可以出发了</span>
+      <span style="flex:1"></span>
+      <button class="btn-main" id="copy-start" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linejoin="round" style="width:15px;height:15px;stroke:var(--navy)"><use href="#i-download"/></svg>
+        <span>开始搬运</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== 菜单 ==================== -->
+  <!--
+      这个 active 是**写死在 HTML 里**的，不是靠 JS 加的。
+      因为四个页面里只要有一个是 active，底部导航就有内容撑着、稳稳待在底；
+      而如果等 JS 跑完才切换，中间会有一帧四个页面全没激活——
+      那一帧里撑高的东西没了，导航条会一路往上贴到顶栏下面，看着就像
+      「菜单/浏览/搬运」跑到顶部去了。写死一个就永远不会出现那一帧，
+      而且用户打开就正好落在菜单页上。
+    -->
+    <section class="page active" data-page="menu">
+    <div class="titlebar">
+      <div class="plate">
+        <div class="hd-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-menu"/></svg></div>
+        <h1>菜单</h1>
+      </div>
+      <div class="tb-tools"><span class="plain" id="dash-greet">本鱼已经准备好啦，随时可以开工</span></div>
+    </div>
+
+    <div class="scroll">
+      <div class="panel">
+        <div class="panel-h" data-help="account">账号<span class="sub">点头像或昵称进入登录页</span></div>
+        <div class="acct-row" id="acct-card">
+          <button class="acct-identity" id="acct-login" type="button" title="点击头像或昵称进入登录页">
+          <span class="big-avatar" id="acct-face"></span>
+          <span class="acct-txt">
+            <b id="acct-name">还没登录</b>
+            <span id="acct-sub">点这里去登录</span>
+          </span>
+          </button>
+          <button class="tbtn icon" id="appear-btn" title="外观：换主题色">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-palette"/></svg>
+          </button>
+          <span class="acct-status">
+            <span class="dot off" id="acct-dot"></span>
+            <span class="tag-ok" id="acct-tag">未连接</span>
+            <button class="tbtn acct-logout" id="login-logout" type="button" title="清除本机登录信息，下次需要重新扫码">退出登录</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box"><span>我的收藏夹</span><b id="dash-stat-folders">0</b><i>个</i></div>
+        <div class="stat-box"><span>已收藏内容</span><b id="dash-stat-items">0</b><i>条</i></div>
+        <div class="stat-box"><span>搬运任务</span><b id="dash-stat-tasks">0</b><i>次</i></div>
+        <div class="stat-box"><span>累计搬运</span><b id="dash-stat-copied">0</b><i>条</i></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h" data-help="tasks">当前任务<span class="sub">点右上角「任务」随时瞄一眼</span></div>
+        <div id="dash-task"><div class="empty" style="padding:22px 10px"><span class="em">💤</span><p>现在没有任务在跑，很闲的样子</p></div></div>
+      </div>
+
+      <div class="panel collapsible" id="history-panel">
+        <div class="panel-h" data-fold="1">任务记录</div>
+        <div class="panel-expanded">
+          <div class="panel-expanded-tools">
+          <span class="hint">每次搬运都留了一份存档</span>
+          <button class="tbtn" id="history-refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-refresh"/></svg>
+            刷新
+          </button>
+          </div>
+        <div id="history-body"><div class="empty"><img class="em-img" src="/static/reading.webp" alt=""><p>翻本子中…</p></div></div>
+        </div>
+      </div>
+
+      <div class="panel collapsible" id="keys-panel">
+        <div class="panel-h" data-fold="1">快捷键</div>
+        <div class="panel-expanded">
+          <div class="panel-expanded-tools">
+            <span class="hint">点右边那个键位就能改</span>
+            <button class="tbtn" id="keys-reset">恢复默认</button>
+          </div>
+        <div id="keys-body"></div>
+        <div class="hint" style="margin-top:8px">
+          点一下键位，然后直接按你想用的键就行；按 <b>Esc</b> 取消。
+          「退多选 / 收详情」那个是保底的，不让改。
+        </div>
+        </div>
+      </div>
+
+      <div class="panel collapsible" id="data-panel">
+        <div class="panel-h" data-fold="1">数据</div>
+        <div class="menu-row"><span>数据目录</span><b class="mono" id="menu-datadir">data/</b>
+          <button class="btn-skew" id="menu-open-datadir"><span>查看</span></button></div>
+        <div class="menu-row"><span>任务存档</span><b id="menu-task-count">0 个</b>
+          <button class="btn-skew" id="menu-clear-tasks"><span>清理</span></button></div>
+        <div class="menu-row"><span>运行日志</span><b>保留最近 7 天</b>
+          <button class="btn-skew" id="menu-view-log"><span>查看</span></button></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h">关于</div>
+        <div class="menu-row"><span>版本</span><b>BiliFav Studio v1.0.0</b></div>
+        <div class="menu-row"><span>技术栈</span><b>Python + 原生 HTML / CSS / JS</b></div>
+        <div class="menu-row"><span>使用范围</span><b>只读公开收藏夹，只写自己的账号</b></div>
+      </div>
+
+      <div class="note">
+        🐳 B 站对收藏操作有限速，本鱼默认每条之间歇 1.5 秒。搬几百条要十几分钟是正常的
+        —— 慢一点才不会被请去喝茶。进度会自动存盘，随时可以关掉再接着跑。
+      </div>
+
+      <div class="note" style="border-color:#E0C070;background:#FBF3DF;color:#6B5320">
+        🔒 登录信息只存在本机 <code class="mono" id="dash-datadir">data/</code> 目录里，
+        程序只会把它发给 bilibili.com，不会经过任何第三方。
+      </div>
+
+      <div class="note">
+        🐳 本鱼不会碰你的密码 —— 扫码登录压根不需要密码。登录凭证只存在本机，
+        程序只会把它发给 bilibili.com。
+      </div>
+    </div>
+
+    <div class="statusline">
+      <span class="plain" id="history-stat">还没搬过什么</span>
+      <span style="flex:1"></span>
+      <span class="plain">🐳 慢慢搬，不着急</span>
+    </div>
+  </section>
+
+  <!-- ==================== 登录 ==================== -->
+  <section class="page" data-page="login">
+    <div class="titlebar">
+      <div class="plate">
+        <div class="hd-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-user"/></svg></div>
+        <h1>登录</h1>
+      </div>
+      <div class="tb-tools"><span class="plain">扫码就行，不需要密码</span></div>
+    </div>
+
+    <div class="scroll">
+      <div class="panel">
+        <div class="panel-h">用 B 站手机 App 扫一扫<span class="sub">登录信息只存本机</span></div>
+        <div class="qr-wrap">
+          <div class="qr-box" id="qr-box">
+            <div class="qr-mask" id="qr-mask"></div>
+          </div>
+          <div class="qr-side">
+            <div class="hint-line" id="qr-hint">正在跟 B 站要二维码…</div>
+            <button class="tbtn" id="qr-refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-refresh"/></svg>
+              换一张
+            </button>
+
+            <div class="alert warn" id="login-status" style="margin-top:14px">
+              <img class="ico-img" src="/static/reading.webp" alt="">
+              <div id="login-status-text">还没登录哦，本鱼不知道要帮谁搬东西呢…</div>
+            </div>
+
+            <div style="margin-top:12px">
+              <button class="tbtn ghost" id="cookie-toggle">二维码扫不了？直接贴 Cookie</button>
+              <div class="cookie-panel hidden" id="cookie-panel">
+                <div class="field">
+                  <label>把浏览器里的 SESSDATA / bili_jct 复制进来</label>
+                  <textarea id="cookie-input" placeholder="SESSDATA=xxxxxx; bili_jct=yyyyyy; DedeUserID=123456"></textarea>
+                </div>
+                <button class="tbtn primary" id="cookie-submit" style="margin-top:9px">用这段 Cookie 登录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        🐳 登录凭证只存在本机 <code class="mono">data/config/session.json</code>，程序只会把它发给 bilibili.com。
+        本鱼只会读公开收藏夹、只往你自己的账号里写东西。
+      </div>
+    </div>
+
+    <div class="statusline">
+      <span class="plain">🐳 二维码有效期 3 分钟，过期了点「换一张」</span>
+    </div>
+  </section>
+
+  <!-- ===== 底部导航 ===== -->
+  <div class="nav">
+    <div class="navitem on" data-page="menu"><img class="nav-badge nav-badge-idle" src="/static/icons/nav-menu-idle-v5.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><img class="nav-badge nav-badge-active" src="/static/icons/nav-menu-active-v5.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><span>菜单</span></div>
+    <div class="navitem" data-page="sort"><img class="nav-badge nav-badge-idle" src="/static/icons/nav-browse-idle-v6.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><img class="nav-badge nav-badge-active" src="/static/icons/nav-browse-active-v6.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><span>浏览</span></div>
+    <div class="navitem" data-page="copy"><img class="nav-badge nav-badge-idle" src="/static/icons/nav-transfer-idle-v5.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><img class="nav-badge nav-badge-active" src="/static/icons/nav-transfer-active-v5.png" width="66" height="66" alt="" aria-hidden="true" draggable="false"><span>搬运</span></div>
+  </div>
+
+</div>
+
+<!-- ===================== 弹窗 ===================== -->
+<div class="modal-mask" id="modal-mask">
+  <div class="modal">
+    <button class="modal-x" id="modal-x" title="关闭" aria-label="关闭">&times;</button>
+    <h3 id="modal-title">标题</h3>
+    <div class="desc" id="modal-desc"></div>
+    <div id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions">
+      <button class="btn-skew" id="modal-cancel" data-mbtn="cancel"><span>算了</span></button>
+      <button class="btn-solid" id="modal-ok" data-mbtn="ok"><span>确定</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<!-- ===================== 页目录（独立的右侧面板） ===================== -->
+<div class="boxpanel" id="boxpanel">
+  <div class="drawer-resizer boxpanel-resizer" id="boxpanel-resizer" title="按住拖动，调整页目录宽度"></div>
+  <div class="bp-head">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-box"/></svg>
+    <b>页目录</b>
+    <span class="sub" id="boxpanel-sub"></span>
+    <button class="bp-close" id="boxpanel-close" title="收起来">&times;</button>
+  </div>
+  <div class="bp-nav">
+    <button class="bp-arrow" id="boxpanel-prev" title="上一页">&#8249;</button>
+    <span id="boxpanel-now">第 1 / 1 页</span>
+    <button class="bp-arrow" id="boxpanel-next" title="下一页">&#8250;</button>
+  </div>
+  <div class="bp-size">
+    <span class="lbl">每页</span>
+      <div class="theme-opts" id="page-size-opts">
+        <button class="pageopt" data-size="20"><span>20 个</span><em>5×4</em></button>
+        <button class="pageopt on" data-size="30"><span>30 个</span><em>6×5</em></button>
+        <button class="pageopt" data-size="50"><span>50 个</span><em>10×5</em></button>
+        <button class="pageopt" id="page-size-custom" data-size="custom"><span>自定义</span><em>自己填</em></button>
+        <button class="pageopt" data-size="0"><span>无限</span><em>平铺</em></button>
+      </div>
+      <div class="bp-custom hidden" id="page-size-custom-box">
+        <span class="lbl">每页</span>
+        <input type="number" id="page-size-input" min="1" max="999" value="40">
+        <button class="pageopt" id="page-size-apply"><span>应用</span></button>
+      </div>
+  </div>
+  <div class="bp-grid" id="boxpanel-grid"></div>
+  <div class="bp-stats" id="box-stats"></div>
+</div>
+
+  <!-- 视频详情独立放在左侧，与收藏夹列表共用宽度、互相切换。 -->
+  <aside class="detail" id="detail">
+    <div class="dt-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><use href="#i-info"/></svg>
+      <b>视频详情</b>
+      <button class="dt-act" id="detail-copy" title="复制这个视频（相当于在这里按 Ctrl+C）">复制</button>
+      <button class="dt-close" id="detail-close" title="收起视频详情">&times;</button>
+    </div>
+    <div class="dt-body" id="detail-body"></div>
+    <div class="drawer-resizer detail-resizer" id="detail-resizer" title="按住拖动，调整左侧栏宽度"></div>
+  </aside>
+
+<!-- ===================== 外观（菜单页头像右边那个小按钮弹出来的） ===================== -->
+<div class="appear-mask" id="appear-mask"></div>
+<div class="appear-pop" id="appear-pop">
+  <div class="ap-head">
+    <span>外观</span>
+    <span class="sub">换一身皮，功能一个都不少</span>
+    <button class="ap-close" id="appear-close">&times;</button>
+  </div>
+  <div class="ap-body">
+    <div class="theme-row">
+      <div class="theme-label">主题色</div>
+      <div class="theme-opts">
+        <button class="theme-opt on" data-theme="blue">
+          <i class="swatch" style="background:#566CAE"></i><span>鲸鱼蓝</span><em>默认</em>
+        </button>
+        <button class="theme-opt" data-theme="pink">
+          <i class="swatch" style="background:#FB7299"></i><span>少女粉</span>
+        </button>
+        <button class="theme-opt" data-theme="system" title="跟随 Windows 强调色；白天／夜晚仍由顶栏切换">
+          <i class="swatch swatch-sys"></i><span>跟随系统</span>
+        </button>
+        <button class="theme-opt" data-theme="custom">
+          <i class="swatch swatch-custom"></i><span>自定义</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="theme-row">
+      <div class="theme-label">主色 / 次要</div>
+      <div class="custom-pick">
+        <span class="pick-tag">主色</span>
+        <input type="color" id="pick-main" value="#566CAE">
+        <input type="text" id="inp-main" value="#566CAE" maxlength="7" spellcheck="false">
+        <span class="pick-tag">次要</span>
+        <input type="color" id="pick-minor" value="#8FAEDA">
+        <input type="text" id="inp-minor" value="#8FAEDA" maxlength="7" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="theme-row">
+      <div class="theme-label">字体</div>
+      <div class="custom-pick">
+        <span class="pick-tag">字色</span>
+        <input type="color" id="pick-text" value="#FFFFFF">
+        <input type="text" id="inp-text" value="#FFFFFF" maxlength="7" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="theme-row" style="display:block">
+      <div class="theme-label" style="width:auto;padding:0 0 2px">色阶预览</div>
+      <div class="swatches" id="swatches">
+        <i style="background:var(--ink)"></i>
+        <i style="background:var(--navy)"></i>
+        <i style="background:var(--navy-2)"></i>
+        <i style="background:var(--navy-3)"></i>
+        <i style="background:var(--blue)"></i>
+        <i style="background:var(--blue-2)"></i>
+        <i style="background:var(--blue-3)"></i>
+        <i style="background:var(--blue-4)"></i>
+        <i style="background:var(--paper)"></i>
+        <i style="background:var(--line)"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 卡片右键菜单（加标签用） ===================== -->
+<div class="ctxmenu" id="ctx-menu"></div>
+
+<!-- ===================== 收藏夹栏的右键菜单 ===================== -->
+<div class="ctxmenu" id="fav-menu"></div>
+
+<!-- ===================== 页目录的右键菜单 ===================== -->
+<div class="ctxmenu" id="box-menu"></div>
+
+<!-- ===== 首次启动：挑主题色 ===== -->
+<div class="welcome" id="welcome">
+  <div class="wc-box">
+    <div class="wc-head">🐳 欢迎使用 BiliFav Studio</div>
+    <div class="wc-body">
+      <p>
+        先把收藏夹搬进来、把顺序理顺 —— 界面颜色你说了算。<br>
+        挑一个喜欢的，之后随时能在「菜单 → 外观」里换。
+      </p>
+      <div class="wc-opts">
+        <button class="wc-opt on" data-wc="blue">
+          <i style="background:#566CAE"></i><b>鲸鱼蓝</b><span>本鱼的蓝，默认</span>
+        </button>
+        <button class="wc-opt" data-wc="pink">
+          <i style="background:#FB7299"></i><b>少女粉</b><span>粉粉的，很少女</span>
+        </button>
+        <button class="wc-opt" data-wc="system">
+          <i class="sys"></i><b>跟随系统</b><span>用系统的强调色</span>
+        </button>
+      </div>
+    </div>
+    <div class="wc-foot">
+      <button class="btn-main" id="wc-go"><span>就用这个</span></button>
+    </div>
+  </div>
+</div>
+
+<script>window.__TOKEN__ = "__DSH_TOKEN__";</script>
+<script src="/static/icon-theme.js?v=1.0.0"></script>
+<script src="/static/draft-codec.js?v=1.0.0"></script>
+<script src="/static/app.js?v=1.0.0"></script>
+
+<!-- ===================== 新手教程：圆形入口 + 分步浮层 ===================== -->
+<div class="tut-mask" id="tut-mask"></div>
+<div class="tut-spotlight" id="tut-spotlight" aria-hidden="true"></div>
+<div class="tut-card" id="tut-card" role="dialog" aria-labelledby="tut-title" aria-describedby="tut-h tut-p tut-target-note" tabindex="-1" inert>
+  <div class="tut-head">
+    <b id="tut-title">新手教程</b>
+    <span class="step" id="tut-step"></span>
+    <button class="tut-x" id="tut-close" title="关闭说明（随时点板块角落的问号重看）" aria-label="关闭说明">&times;</button>
+  </div>
+  <div class="tut-bar"><i id="tut-bar-fill"></i></div>
+  <div class="tut-content">
+    <!-- 大肥鱼直接站在说明旁边说话：不套小框、也不标名字（她不是一张立绘） -->
+      <img class="tut-mascot" src="/static/mascot.webp" alt="" aria-hidden="true" width="72" height="84" draggable="false">
+    <div class="tut-body">
+      <b id="tut-h"></b>
+      <p id="tut-p"></p>
+      <p class="tut-target-note" id="tut-target-note" hidden></p>
+    </div>
+  </div>
+  <div class="tut-foot">
+    <button class="tut-skip" id="tut-skip">跳过教程</button>
+    <div class="tut-nav">
+      <button class="tut-btn2" id="tut-prev">上一步</button>
+      <button class="tut-btn2 primary" id="tut-next">下一步</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

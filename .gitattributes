@@ -1,0 +1,15 @@
+# 统一用 LF 存进版本库 —— 不然 Windows 上每次都刷一堆
+# "LF will be replaced by CRLF" 的警告，看着像出错了。
+* text=auto eol=lf
+
+# 这些是二进制，别当文本处理
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.exe  binary
+*.zip  binary
+*.woff binary
+*.woff2 binary

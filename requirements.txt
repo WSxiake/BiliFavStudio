@@ -1,0 +1,10 @@
+# 运行依赖
+requests>=2.25.0
+pywebview>=4.0
+
+# 说明：
+#   requests  —— 调 B 站接口
+#   pywebview —— 把界面装进原生窗口（桌面模式用；只跑 python run.py 网页模式的话可以不要）
+#
+# 要打包成独立 exe，另外还需要：
+#   pyinstaller>=6.0
